@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- zohoEmbadedApp -->
+<script type="text/javascript" src="https://live.zwidgets.com/js-sdk/1.1/ZohoEmbededAppSDK.min.js"></script>
+
+<body>
+<header style="background-color:#454545;">
+  <div class="opacity-75">
+  <nav class="navbar bg-dark">
+  <div class="container-fluid">
+  <a class="navbar-brand ps-3" href="#">
+  <img src="https://i.ibb.co/r709sfx/Visavie.png" alt="" width="40%" height="40%" class="d-inline-block align-text-top" style="z-index: 3;margin-top: 3px;border: 5px solid white;background-color: white;border-radius: 5px;">
+  </a>
+  <td>
+  <div style="float:right;width:15%;">
+  <a>
+  <img  src="https://i.ibb.co/XxrJwzM/New-logo-1-1.png"  alt="" width="100vw" height="60vw" class="d-inline-block align-text-top" style="margin-top: -11px; margin-left: 70px;border-radius: 8px;">
+  </a>
+  </div>
+  </td>
+  </div>
+  </nav>
+  </div>
+  </header>
+<br>
+<div class="container box">
+
+<div class="row" style="padding: 1px 15px;">
+<div class="container col-md-3">
+<label class="heading">Prénom/First Name</label>
+<input type="search" id ="FName" class="form-select"  aria-label="Default select example" style="padding: 8px 5px;background-image: none;width: 80%;" onfocusout= "myFunction(this.id)">
+</div>
+<div class="container col-md-3">
+<label class="heading">Nom/Last Name</label>
+<input type="search" id ="LName" class="form-select"  aria-label="Default select example" style="padding: 8px 5px;background-image: none;width: 80%;" onfocusout= "myFunction(this.id)">
+</div>
+<div class="container col-md-3">
+<label class="heading">Téléphone/Phone</label>
+<input type="search" id ="phno" class="form-select"  aria-label="Default select example" style="padding: 8px 5px;background-image: none;width: 80%;" onfocusout= "myFunction(this.id)">
+</div>
+<div class="container col-md-3">
+<label class="heading">Courriel /Email</label>
+<input type="search" id ="Mailid" class="form-select"  aria-label="Default select example" style="padding: 8px 5px;background-image: none;width: 80%;" onfocusout= "myFunction(this.id)">
+</div>
+<br>
+<br>
+<div class="row gap-1">
+<div class="container col-md-3">
+<button class="btn btn-success" style="width: 100%;margin-top: 20px;"  onclick="myFunction(this.id)" id="search">Rechercher/search</button></div>
+</div>
+</div>
+<!---<br>
+    <div style="display: flex;justify-content: right;color: white;">
+        Total matching Records : <p id="matchingRec">0</p>
+    </div>--->
+<br>
+<div class="container mt-3">
+  <h2></h2>
+  <br>
+
+  <ul class="hi nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" data-bs-toggle="tab" href="#lead">Prospect correspondant/Matching lead</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#contact">Contact correspondant/Matching contact</a>
+    </li>
+
+  </ul>
+
+  <!-- Tab panes -->
+<div class="tab-content">
+  <!-----Contact table---->
+  <div id="contact" class="container tab-pane "><br>
+    <h3></h3>
+    <p>
+    <div class="container box">
+	<table class="table table-dark table-hover" id="myTable">
+		<tr>
+			<th style="width:3%" scope="col">S.no</th>
+		    <th style="width:15%" scope="col">Prénom/First Name</th>
+		    <th style="width:15%" scope="col">Nom/Last Name</th>
+		    <th style="width:15%" class="mobileHide" scope="col">DDN/DOB</th>          
+		    <th style="width:15%" class="mobileHide" scope="col">Courriel /Email</th>
+		    <th style="width:15%" class='mobileHide' scope="col">Téléphone</th>
+		    <th style="width:15%" class="mobileHide" scope="col">Type contact</th>
+		    <th style="width:7%" scope="col">Voir/View</th>
+		</tr>
+		<tr id = 'emptyRow' style="text-align: center;"><td colspan="8">No Data Found</td></tr>
+	  </table>
+	  <br>
+    <div style="display: flex;justify-content: right;">
+      <!-- <div style="width: 80px;"><button onclick="myFunction(this.id,currentPageNo,'Previous')">Previous</button></div>
+      <div style="width: 55px;"><button onclick="myFunction(this.id,currentPageNo,'Next')">Next</button></div> -->
+      <div class="pagination" id="paginationID">
+        Page<div id="previousID" onclick="myFunction(this.id,1,'Previous')"> &nbsp; &laquo;</div>
+        <div id="page1" onclick="myFunction(this.id,1,'Pagination')">1</div>
+        <div id="page2" onclick="myFunction(this.id,2,'Pagination')">2</div>
+        <div id="page3" onclick="myFunction(this.id,3,'Pagination')">3</div>
+        <div id="page4" onclick="myFunction(this.id,4,'Pagination')">4</div>
+        <div id="page5" onclick="myFunction(this.id,5,'Pagination')">5</div>
+        <div id="page6" onclick="myFunction(this.id,6,'Pagination')">6</div>
+        <div id="NextID" onclick="myFunction(this.id,1,'Next')">&raquo;</div>
+      </div>
+    </div>
+	  <div class="          ">
+		<div class="container">
+		<a  style= "margin-right: 2vw; margin-left: 24vw;"  href='https://crm.zoho.com/crm/org746753262/tab/Leads/create?layoutId=4846491000000091055' target='_blank' class="btn btn-success">Créer prospect/Create lead</a>
+		<a href='https://crm.zoho.com/crm/org746753262/tab/Contacts/create?layoutId=4846491000000339001' target='_blank' class="btn btn-success">Créer contact/Create contact</a>
+	  </div>
+  </div>
+    </div>
+    </p>
+</div>
+<!-----Lead table---->
+<div id="lead" class="container tab-pane active"><br>
+  <h3></h3>
+  <p>
+    <div class="container box" >
+<table class="table table-dark table-hover" id="myTable2" >
+  <tr>
+    <th style="width:3%" scope="col">S.no</th>
+      <th style="width:15%" scope="col">Prénom/First Name</th>
+      <th style="width:15%" scope="col">Nom/Last Name</th>
+      <th style="width:15%" class="mobileHide" scope="col">DDN/DOB</th>          
+      <th style="width:15%" class="mobileHide" scope="col">Courriel /Email</th>
+      <th style="width:15%" class='mobileHide' scope="col">Téléphone</th>
+      <th style="width:15%" class="mobileHide" scope="col">Type contact</th>
+      <th style="width:7%" scope="col">Voir/View</th>
+  </tr>
+  <tr id = 'emptyRow' style="text-align: center;"><td colspan="8">No Data Found</td></tr>
+  </table>
+  <br>
+  <div style="display: flex;justify-content: right;">
+    <div class="pagination" id="LpaginationID">
+      Page<div id="previousID" onclick="searchLeadFunction(this.id,1,'Previous')"> &nbsp; &laquo;</div>
+      <div id="Lpage1" onclick="searchLeadFunction(this.id,1,'Pagination')">1</div>
+      <div id="Lpage2" onclick="searchLeadFunction(this.id,2,'Pagination')">2</div>
+      <div id="Lpage3" onclick="searchLeadFunction(this.id,3,'Pagination')">3</div>
+      <div id="Lpage4" onclick="searchLeadFunction(this.id,4,'Pagination')">4</div>
+      <div id="Lpage5" onclick="searchLeadFunction(this.id,5,'Pagination')">5</div>
+      <div id="Lpage6" onclick="searchLeadFunction(this.id,6,'Pagination')">6</div>
+      <div id="LNextID" onclick="searchLeadFunction(this.id,currentPageNo,'Next')">&raquo;</div>
+    </div>
+  </div>
+  <div class="          ">
+		<div class="container">
+		<a  style= "margin-right: 2vw; margin-left: 24vw;"  href='https://crm.zoho.com/crm/org746753262/tab/Leads/create?layoutId=4846491000000091055' target='_blank' class="btn btn-success">Créer prospect/Create lead</a>
+		<a href='https://crm.zoho.com/crm/org746753262/tab/Contacts/create?layoutId=4846491000000339001' target='_blank' class="btn btn-success">Créer contact/Create contact</a>
+	  </div>
+  </div>
+</div>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<br>
+<br>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script>
+document.getElementById("paginationID").style.display ="none";
+document.getElementById("LpaginationID").style.display ="none";
+function myFunction(row ,pageNo, clickFrom) {
+  console.log("myFn Called");
+  //var row = document.getElementById(row);
+  var F_name = document.getElementById("FName").value;
+  var L_name = document.getElementById("LName").value;
+  var E_mail = document.getElementById("Mailid").value;
+  var Ph_No = document.getElementById("phno").value;
+
+  //Pagination
+  var currentPageNo = 1;
+  var totalRecordCount = 0;
+  if (clickFrom == "Next"){
+        currentPageNo = pageNo + 1;
+    }
+  if (clickFrom == "Previous"){
+    if (pageNo != 1) {
+      currentPageNo = pageNo - 1;
+    }
+  }                                                                                         
+  if (clickFrom == "Pagination"){
+    currentPageNo = pageNo;
+  } 
+  console.log("pageNo" + pageNo + " -- " + currentPageNo);
+
+  //var func_name = "searchContacQueryfn";
+  var func_name = "SearchLead";
+  var req_data = {"arguments": JSON.stringify({"Fname": F_name,"Lname": L_name,"mail": E_mail,"Phone": Ph_No,"PageNo": currentPageNo})};
+  console.log(req_data);
+
+  //----code to get data from crm---//
+  ZOHO.CRM.FUNCTIONS.execute(func_name,req_data).then(function(data)
+  {
+    //delete existing rows - starts here
+    console.log("search Contact : " + JSON.stringify(data));
+    removeRow();
+    function removeRow() {  
+      try {  
+          var deltTable = document.getElementById('myTable');  
+          var rowCount = deltTable.rows.length;  
+          for (var i = 1; i < rowCount; i++) { 
+            deltrowIndex = deltTable.rows.length -1;
+            deltTable.deleteRow(deltrowIndex);         
+          }  
+      } catch (e) {
+        console.log("delete Row error");  
+        console.log("catch error"+e);  
+      }  
+    }
+    //delete existing rows - Ends here
+
+    var response_Data = JSON.stringify(data);
+    console.log("output Data ----- :"+response_Data);
+    var resObj = JSON.parse(response_Data);
+    if(data.code == "success")
+    {
+      var finalData = resObj.details.output;
+      if(finalData != "Empty Query"){
+        const fdata = JSON.parse(finalData);
+        totalRecord = 0;
+        for (let i=0; i<fdata.length; i++)
+        {
+        let insert_row = i+1;
+        var table = document.getElementById("myTable");
+        var row = table.insertRow(insert_row);
+        row.id = fdata[i].recId;
+        //console.log("recid :" + fdata[i].Fname);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+        var cell8 = row.insertCell(7);
+        //var down_link = JSON.parse(data.details.output).Download_Link;
+        cell1.innerHTML = "<td>"+insert_row+"</td>";
+        cell2.innerHTML = "<td>"+fdata[i].Fname+"</td>";
+        cell3.innerHTML = "<td>"+fdata[i].Lname+"</td>";
+        cell4.innerHTML = "<td class='mobileHide'>"+fdata[i].DOB+"</td>";
+        cell5.innerHTML = "<td class='mobileHide'>"+fdata[i].Email+"</td>";
+        var phonedata = "";
+        if(fdata[i].Phone != "-")
+        {
+          phonedata = phonedata +"C:"+ fdata[i].Phone ;
+        }
+        if(fdata[i].Work_Phone != "-")
+        {
+          if(phonedata != "")
+          {
+            phonedata = phonedata +"<br>W:"+fdata[i].Work_Phone;
+          }
+          else
+          {
+            phonedata = phonedata +"<br>W:"+fdata[i].Work_Phone;
+          }
+        }
+        if(fdata[i].Home_Phone != "-")
+        {
+          if(phonedata != "")
+          {
+            phonedata = phonedata +"<br>H:"+fdata[i].Home_Phone;
+          }
+          else
+          {
+            phonedata = phonedata +"<br>H:"+fdata[i].Home_Phone;
+          }
+        }
+        if(fdata[i].Home_Phone == "-" && fdata[i].Work_Phone == "-" && fdata[i].Phone == "-" )
+        {
+          phonedata = "-";
+        }
+
+        cell6.innerHTML = "<td class='mobileHide'>"+phonedata+"</td>";
+        cell7.innerHTML = "<td class='mobileHide'>"+fdata[i].Type+"</td>"; 
+        cell8.innerHTML = "<td><a href='https://crm.zoho.com/crm/org746753262/tab/Contacts/"+row.id+"' target='_blank' class='btn btn-success'>Choisir/Choose</a></td>"; 
+        totalpagecount = fdata[i].totalLoopCount;
+       // totalMatchingRecord = fdata[i].totalRecordCount;
+      }
+      console.log("total record : "+totalRecord);
+     // document.getElementById("matchingRec").value = totalRecord;
+        console.log("code near current page");
+        if (currentPageNo == 1) {
+              totalLoopCount = totalpagecount;
+              console.log("pageloopcount :" + totalLoopCount);
+            }
+
+            //------Hide the Pagination Options here - Start-----
+
+            if (totalLoopCount == 1) {
+              console.log("page count 1");
+              document.getElementById("paginationID").style.display = "none";
+            }
+            else {
+              console.log("page count more than 1");
+              document.getElementById("paginationID").style.display = "block";
+              if (totalLoopCount >= 1) {
+                if (totalLoopCount < 6) {
+                  document.getElementById("page6").style.display = "none";
+                  if (totalLoopCount < 5) {
+                    document.getElementById("page5").style.display = "none";
+                    if (totalLoopCount < 4) {
+                      document.getElementById("page4").style.display = "none";
+                      if (totalLoopCount < 3) {
+                        document.getElementById("page3").style.display = "none";
+                        if (totalLoopCount < 2) {
+                        document.getElementById("page2").style.display = "none";
+                      }
+                      }
+                    }
+                  }
+                }
+                else
+                {
+                  document.getElementById("NextID").style.display = "none";
+                }
+                if (currentPageNo >= 1) {
+                  document.getElementById("previousID").style.display = "block";
+                  if(currentPageNo == 1)
+                  {
+                    document.getElementById("previousID").style.display = "none";
+                  }
+                  if (currentPageNo == totalLoopCount) {
+                    document.getElementById("NextID").style.display = "none";
+                  }
+                  else {
+                    document.getElementById("NextID").style.display = "block";
+                  }
+                }
+              }
+            }
+            //------Hide the Pagination Options here - End Here-----
+        if(fdata.length == 0)
+        {
+          console.log("empty row");
+          var table = document.getElementById("myTable");
+          var insert_EmptyRow =1;
+          var EmptyRow = table.insertRow(insert_EmptyRow);
+          var EmptyCell = EmptyRow.insertCell(0);
+          EmptyCell.innerHTML = "<td style='text-align:center;'>No Data Found</td>";
+          document.getElementById('myTable').rows[1].cells[0].colSpan = 8;
+        }
+      
+    }
+    else
+    {
+      console.log("empty row");
+    var table = document.getElementById("myTable");
+    var insert_EmptyRow =1;
+    var EmptyRow = table.insertRow(insert_EmptyRow);
+    var EmptyCell = EmptyRow.insertCell(0);
+    EmptyCell.innerHTML = "<td>No Data Found</td>";
+    EmptyCell.style.textAlign = "center";
+    document.getElementById('myTable').rows[1].cells[0].colSpan = 8;
+
+    }
+    }
+    else
+    {
+    console.log("empty row");
+    var table = document.getElementById("myTable");
+    var insert_EmptyRow =1;
+    var EmptyRow = table.insertRow(insert_EmptyRow);
+    var EmptyCell = EmptyRow.insertCell(0);
+    EmptyCell.innerHTML = "<td>No Data Found</td>";
+    EmptyCell.style.textAlign = "center";
+    document.getElementById('myTable').rows[1].cells[0].colSpan = 8;
+    }
+    //document.getElementById("totalRec").innerHTML = "Total Records:"+insert_row;
+  })
+
+  //Search data from Lead Module 
+  searchLeadFunction("",1,"Pagination");
+function searchLeadFunction(row ,pageNo, clickFrom )
+{
+  //Pagination
+  var currentPageNo = 1;
+  var totalRecordCount = 0;
+  if (clickFrom == "Next"){
+        currentPageNo = pageNo + 1;
+    }
+  if (clickFrom == "Previous"){
+    if (pageNo != 1) {
+      currentPageNo = pageNo - 1;
+    }
+  }                                                                                         
+  if (clickFrom == "Pagination"){
+    currentPageNo = pageNo;
+  } 
+  console.log("pageNo" + pageNo + " -- " + currentPageNo);
+  //end init of Pagination
+
+  var Lfunc_name = "Lead_Query";
+  var Lreq_data = {"arguments": JSON.stringify({"Firstname": F_name,"Lastname": L_name,"mail": E_mail,"Phone": Ph_No,"PageNo":currentPageNo})};
+  ZOHO.CRM.FUNCTIONS.execute(Lfunc_name,Lreq_data).then(function(Ldata)
+  {
+    console.log("search Lead : " + JSON.stringify(Ldata));
+    removeRow();
+  function removeRow() {  
+    try {  
+        var lead_deltTable = document.getElementById('myTable2');  
+        var lead_rowCount = lead_deltTable.rows.length;  
+        console.log("delete- row count :" + lead_rowCount);
+        for (var i = 1; i < lead_rowCount; i++) { 
+          deltrowIndex = lead_deltTable.rows.length -1;
+          lead_deltTable.deleteRow(deltrowIndex);
+          console.log("deleted Row : " + i );
+          console.log("total rows: " +lead_deltTable.rows.length);
+          //rowCount--;          
+        }  
+    } catch (e) {
+      console.log("delete Row error");  
+        console.log("catch error"+e);  
+    }  
+}
+    console.log("search lead fuction called");
+    var Lresponse_Data = JSON.stringify(Ldata);
+    console.log("Lresponse_Data :"+Ldata);
+    var LresObj = JSON.parse(Lresponse_Data);
+  if(Ldata.code == "success")
+  {
+    var LfinalData = Ldata.details.output;
+    const Lfdata = JSON.parse(LfinalData);
+    console.log("response_Data :" + Lfdata.length);
+    // var tableRow = document.getElementById("emptyRow");
+    // tableRow.innerHTML = "";
+     for (let i=0; i<Lfdata.length; i++)
+    {
+    console.log("loop : "+ i);
+    let Linsert_row = i+1;
+    var Ltable = document.getElementById("myTable2");
+    var Lrow = Ltable.insertRow(Linsert_row);
+    Lrow.id = Lfdata[i].recId;
+    console.log("recid :" + Lfdata[i].Fname);
+    var Lcell1 = Lrow.insertCell(0);
+    var Lcell2 = Lrow.insertCell(1);
+    var Lcell3 = Lrow.insertCell(2);
+    var Lcell4 = Lrow.insertCell(3);
+    var Lcell5 = Lrow.insertCell(4);
+    var Lcell6 = Lrow.insertCell(5);
+    var Lcell7 = Lrow.insertCell(6);
+    var Lcell8 = Lrow.insertCell(7);
+    //var down_link = JSON.parse(data.details.output).Download_Link;
+    console.log("td data :" + Lfdata[i].Firstname );
+    Lcell1.innerHTML = "<td>"+Linsert_row+"</td>";
+    Lcell2.innerHTML = "<td>"+Lfdata[i].Firstname+"</td>";
+    Lcell3.innerHTML = "<td>"+Lfdata[i].Lastname+"</td>";
+    Lcell4.innerHTML = "<td>"+Lfdata[i].DOB+"</td>";
+    Lcell5.innerHTML = "<td>"+Lfdata[i].Email+"</td>";
+    if(Lfdata[i].Phone != "-")
+        {
+          phonedata = phonedata +"C:"+ Lfdata[i].Phone ;
+        }
+        if(Lfdata[i].Work_Phone != "-")
+        {
+          if(phonedata != "")
+          {
+            phonedata = phonedata +"<br>W:"+Lfdata[i].Work_Phone;
+          }
+          else
+          {
+            phonedata = phonedata +"<br>W:"+Lfdata[i].Work_Phone;
+          }
+        }
+        if(Lfdata[i].Home_Phone != "-")
+        {
+          if(phonedata != "")
+          {
+            phonedata = phonedata +"<br>H:"+Lfdata[i].Home_Phone;
+          }
+          else
+          {
+            phonedata = phonedata +"<br>H:"+Lfdata[i].Home_Phone;
+          }
+        }
+        if(Lfdata[i].Home_Phone == "-" && Lfdata[i].Work_Phone == "-" && Lfdata[i].Phone == "-" )
+        {
+          phonedata = "-";
+        }
+    Lcell6.innerHTML = "<td class='mobileHide'>"+phonedata+"</td>";
+    Lcell7.innerHTML = "<td>"+Lfdata[i].Type+"</td>"; 
+    Lcell8.innerHTML = "<td><a href='https://crm.zoho.com/crm/org746753262/tab/Leads/"+Lrow.id+"' target='_blank' class='btn btn-success'>Voir/View</a></td>"; 
+    totalpagecount = Lfdata[i].totalLoopCount;
+       // totalMatchingRecord = fdata[i].totalRecordCount;
+      }
+      console.log("total record : "+totalRecord);
+     // document.getElementById("matchingRec").value = totalRecord;
+        
+        if (currentPageNo == 1) {
+              totalLoopCount = totalpagecount;
+              console.log("pageloopcount :" + totalLoopCount);
+            }
+
+            //------Hide the Pagination Options here - Start-----
+
+            if (totalLoopCount == 1) {
+              console.log("page count 1");
+              document.getElementById("LpaginationID").style.display = "none";
+            }
+            else {
+              console.log("page count more than 1");
+              document.getElementById("LpaginationID").style.display = "block";
+              if (totalLoopCount >= 1) {
+                if (totalLoopCount < 6) {
+                  document.getElementById("Lpage6").style.display = "none";
+                  if (totalLoopCount < 5) {
+                    document.getElementById("Lpage5").style.display = "none";
+                    if (totalLoopCount < 4) {
+                      document.getElementById("Lpage4").style.display = "none";
+                      if (totalLoopCount < 3) {
+                        document.getElementById("Lpage3").style.display = "none";
+                        if (totalLoopCount < 2) {
+                        document.getElementById("Lpage2").style.display = "none";
+                      }
+                      }
+                    }
+                  }
+                }
+                else
+                {
+                  document.getElementById("LNextID").style.display = "none";
+                }
+                if (currentPageNo >= 1) {
+                  document.getElementById("LpreviousID").style.display = "block";
+                  if(currentPageNo == 1)
+                  {
+                    document.getElementById("LpreviousID").style.display = "none";
+                  }
+                  if (currentPageNo == totalLoopCount) {
+                    document.getElementById("LNextID").style.display = "none";
+                  }
+                  else {
+                    document.getElementById("LNextID").style.display = "block";
+                  }
+                }
+              }
+            }
+            
+    if(Lfdata.length == 0)
+    {
+      console.log("empty row");
+      var Ltable = document.getElementById("myTable2");
+      var insert_EmptyRow =1;
+      var LEmptyRow = Ltable.insertRow(Linsert_EmptyRow);
+      var LEmptyCell = LEmptyRow.insertCell(0);
+      LEmptyCell.innerHTML = "<td>No Matching Data</td>";
+      document.getElementById('myTable2').rows[1].cells[0].colSpan = 8;
+    }
+  }
+  else
+  {
+      console.log("empty row");
+      var Ltable = document.getElementById("myTable2");
+      var insert_EmptyRow =1;
+      var LEmptyRow = Ltable.insertRow(Linsert_EmptyRow);
+      var LEmptyCell = LEmptyRow.insertCell(0);
+      LEmptyCell.innerHTML = "<td>No Matching Data</td>";
+      document.getElementById('myTable2').rows[1].cells[0].colSpan = 8;
+  }
+    //document.getElementById("totalRec").innerHTML = "Total Records:"+insert_row;
+  })
+
+}
+
+  //}
+// else
+// {
+//   //alert( "Please enter First Name To search related Profile");
+// }
+}
+
+function searchLeadFunction(row ,pageNo, clickFrom)
+{
+  var Lfunc_name = "Lead_Query";
+  var Lreq_data = {"arguments": JSON.stringify({"Firstname": F_name,"Lastname": L_name,"mail": E_mail,"Phone": Ph_No,"PageNo":currentPageNo})};
+  ZOHO.CRM.FUNCTIONS.execute(Lfunc_name,Lreq_data).then(function(Ldata)
+  {
+    console.log("search Lead : " + JSON.stringify(Ldata));
+    removeRow();
+  function removeRow() {  
+    try {  
+        var lead_deltTable = document.getElementById('myTable2');  
+        var lead_rowCount = lead_deltTable.rows.length;  
+        console.log("delete- row count :" + lead_rowCount);
+        for (var i = 1; i < lead_rowCount; i++) { 
+          deltrowIndex = lead_deltTable.rows.length -1;
+          lead_deltTable.deleteRow(deltrowIndex);
+          console.log("deleted Row : " + i );
+          console.log("total rows: " +lead_deltTable.rows.length);
+          //rowCount--;          
+        }  
+    } catch (e) {
+      console.log("delete Row error");  
+        console.log("catch error"+e);  
+    }  
+}
+    console.log("search lead fuction called");
+    var Lresponse_Data = JSON.stringify(Ldata);
+    console.log("Lresponse_Data :"+Ldata);
+    var LresObj = JSON.parse(Lresponse_Data);
+  if(Ldata.code == "success")
+  {
+    var LfinalData = LresObj.details.output;
+    const Lfdata = JSON.parse(LfinalData);
+    console.log("response_Data :" + Lfdata.length);
+    // var tableRow = document.getElementById("emptyRow");
+    // tableRow.innerHTML = "";
+     for (let i=0; i<Lfdata.length; i++)
+    {
+    console.log("loop : "+ i);
+    let Linsert_row = i+1;
+    var Ltable = document.getElementById("myTable2");
+    var Lrow = Ltable.insertRow(Linsert_row);
+    Lrow.id = Lfdata[i].recId;
+    console.log("recid :" + Lfdata[i].Fname);
+    var Lcell1 = Lrow.insertCell(0);
+    var Lcell2 = Lrow.insertCell(1);
+    var Lcell3 = Lrow.insertCell(2);
+    var Lcell4 = Lrow.insertCell(3);
+    var Lcell5 = Lrow.insertCell(4);
+    var Lcell6 = Lrow.insertCell(5);
+    var Lcell7 = Lrow.insertCell(6);
+    var Lcell8 = Lrow.insertCell(7);
+    //var down_link = JSON.parse(data.details.output).Download_Link;
+    console.log("td data :" + Lfdata[i].Fname );
+    Lcell1.innerHTML = "<td>"+Linsert_row+"</td>";
+    Lcell2.innerHTML = "<td>"+Lfdata[i].Firstname+"</td>";
+    Lcell3.innerHTML = "<td>"+Lfdata[i].Lastname+"</td>";
+    Lcell4.innerHTML = "<td>"+Lfdata[i].DOB+"</td>";
+    Lcell5.innerHTML = "<td>"+Lfdata[i].Email+"</td>";
+    if(Lfdata[i].Phone != "-")
+        {
+          phonedata = phonedata +"C:"+ Lfdata[i].Phone ;
+        }
+        if(Lfdata[i].Work_Phone != "-")
+        {
+          if(phonedata != "")
+          {
+            phonedata = phonedata +"<br>W:"+Lfdata[i].Work_Phone;
+          }
+          else
+          {
+            phonedata = phonedata +"<br>W:"+Lfdata[i].Work_Phone;
+          }
+        }
+        if(Lfdata[i].Home_Phone != "-")
+        {
+          if(phonedata != "")
+          {
+            phonedata = phonedata +"<br>H:"+Lfdata[i].Home_Phone;
+          }
+          else
+          {
+            phonedata = phonedata +"<br>H:"+Lfdata[i].Home_Phone;
+          }
+        }
+        if(Lfdata[i].Home_Phone == "-" && Lfdata[i].Work_Phone == "-" && Lfdata[i].Phone == "-" )
+        {
+          phonedata = "-";
+        }
+    Lcell6.innerHTML = "<td class='mobileHide'>"+phonedata+"</td>";
+    Lcell7.innerHTML = "<td>"+Lfdata[i].Type+"</td>"; 
+    Lcell8.innerHTML = "<td><a href='https://crm.zoho.com/crm/org746753262/tab/Leads/"+Lrow.id+"' target='_blank' class='btn btn-success'>Choose</a></td>"; 
+    totalpagecount = fdata[i].totalLoopCount;
+       // totalMatchingRecord = fdata[i].totalRecordCount;
+      }
+      console.log("total record : "+totalRecord);
+     // document.getElementById("matchingRec").value = totalRecord;
+        console.log("code near current page");
+        if (currentPageNo == 1) {
+              totalLoopCount = totalpagecount;
+              console.log("pageloopcount :" + totalLoopCount);
+            }
+
+            //------Hide the Pagination Options here - Start-----
+
+            if (totalLoopCount == 1) {
+              console.log("page count 1");
+              document.getElementById("paginationID").style.display = "none";
+            }
+            else {
+              console.log("page count more than 1");
+              document.getElementById("paginationID").style.display = "block";
+              if (totalLoopCount >= 1) {
+                if (totalLoopCount < 6) {
+                  document.getElementById("page6").style.display = "none";
+                  if (totalLoopCount < 5) {
+                    document.getElementById("page5").style.display = "none";
+                    if (totalLoopCount < 4) {
+                      document.getElementById("page4").style.display = "none";
+                      if (totalLoopCount < 3) {
+                        document.getElementById("page3").style.display = "none";
+                        if (totalLoopCount < 2) {
+                        document.getElementById("page2").style.display = "none";
+                      }
+                      }
+                    }
+                  }
+                }
+                else
+                {
+                  document.getElementById("NextID").style.display = "none";
+                }
+                if (currentPageNo >= 1) {
+                  document.getElementById("previousID").style.display = "block";
+                  if(currentPageNo == 1)
+                  {
+                    document.getElementById("previousID").style.display = "none";
+                  }
+                  if (currentPageNo == totalLoopCount) {
+                    document.getElementById("NextID").style.display = "none";
+                  }
+                  else {
+                    document.getElementById("NextID").style.display = "block";
+                  }
+                }
+              }
+            }
+            
+    if(Lfdata.length == 0)
+    {
+      console.log("empty row");
+      var Ltable = document.getElementById("myTable2");
+      var insert_EmptyRow =1;
+      var LEmptyRow = Ltable.insertRow(Linsert_EmptyRow);
+      var LEmptyCell = LEmptyRow.insertCell(0);
+      LEmptyCell.innerHTML = "<td>No Matching Data</td>";
+      document.getElementById('myTable2').rows[1].cells[0].colSpan = 8;
+    }
+  }
+  else
+  {
+      console.log("empty row");
+      var Ltable = document.getElementById("myTable2");
+      var insert_EmptyRow =1;
+      var LEmptyRow = Ltable.insertRow(Linsert_EmptyRow);
+      var LEmptyCell = LEmptyRow.insertCell(0);
+      LEmptyCell.innerHTML = "<td>No Matching Data</td>";
+      document.getElementById('myTable2').rows[1].cells[0].colSpan = 8;
+  }
+    //document.getElementById("totalRec").innerHTML = "Total Records:"+insert_row;
+  })
+
+}
+
+
+/*****/
+ZOHO.embeddedApp.on("PageLoad",function(data)
+ {
+  //ZOHO.CRM.FUNCTIONS.execute(func_name,req_data).then(function(data){console.log("CRM Data:"+JSON.stringify(data))})
+  if(data && data.Entity)
+		{
+			ZOHO.CRM.API.getRecord({Entity:data.Entity,RecordID:data.EntityId}).then(function(response){});	
+		}
+  })
+ ZOHO.embeddedApp.init();
+/*****/
+
+/*****/
+function submit_button(){}
+/*****/
+function close_button()
+{
+  ZOHO.CRM.UI.Popup.closeReload()
+}
+
+</script>
+</body>
+</html>

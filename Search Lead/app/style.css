@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Josefin Sans", sans-serif;
+  }
+  body
+  {
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.15)),url(https://visavie.com/app/uploads/2020/10/10-symptomes-de-la-maladie-alzheimer-3.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  nav {
+    width: 100%;
+    height: 15vh;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+  }
+  #logo
+  {
+    z-index: 3;
+  }
+  
+.heading
+{
+  color: white;
+  font-weight: bold;
+}
+
+.hidden-fields
+{
+  display:none;
+}
+
+.box
+{
+  background: linear-gradient(to right, #2D2D2D,#222121 );
+  padding: 1rem;
+  border-radius: 10px;
+  opacity: .9;
+  z-index: 1;
+}
+
+
+#btnRow
+{
+  z-index: 3;
+  opacity: 1;
+  
+}
+.pagination {
+  display: inline-block;
+}
+
+.pagination div {
+  /* color: black; */
+  color: white;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+#mytable button {
+  background-color: #198754;
+  color: #e9e9e9;
+  border: solid #198754;
+  border-radius: 4px;
+}
+@media only screen and (max-width: 400px){
+  header{
+    width: 200vw;
+  }
+  .mobileHide { display: none;}
+  }
+
+ 
