@@ -1,0 +1,12 @@
+datamaps = Map();
+dataList = List();
+notes_map = Map();
+notes_map.put("Note_Title","Test");
+notes_map.put("Owner",Owner);
+notes_map.put("Created_Time",CreatedTime);
+notes_map.put("Parent_Id",ContactID);
+notes_map.put("se_module","Contacts");
+dataList.add(notes_map);
+datamaps.put("data",dataList);
+notecreate = zoho.crm.createRecord("Notes",notes_map);
+return "";
