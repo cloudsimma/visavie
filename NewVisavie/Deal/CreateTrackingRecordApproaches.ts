@@ -1,0 +1,221 @@
+try 
+{
+	getDeal = zoho.crm.getRecordById("Deals",dealID.toNumber());
+	if(getDeal.get("id") != null)
+	{
+		appName = "visavie";
+		ownerName = "lion_visavie";
+		formName = "Developer_Log";
+		/*Hospital Tracking-starts*/
+		hsptlmap = Map();
+		hsptlmap.put("Deal_Name",getDeal.get("Deal_Name"));
+		hsptlmap.put("Deal_Creation_Date",zoho.currentdate.toString("dd-MMM-yyyy"));
+		hsptlmap.put("Deal_ID",getDeal.get("id").toString());
+		hsptlmap.put("Status1",getDeal.get("Stage"));
+		hsptlmap.put("Deal_Type","Deal");
+		/*Hospital Tracking-ends*/
+		tracking_map = Map();
+		tracking_map.put("Name",getDeal.get("Deal_Name"));
+		tracking_map.put("Deal_Creation_Date",zoho.currentdate.toString("yyyy-MM-dd"));
+		tracking_map.put("Initial_Stage","Démarches");
+		tracking_map.put("Personal_Reference_Deal_1",getDeal.get("Personal_referral"));
+		if(getDeal.get("Counselor_Conseiller") != null)
+		{
+			tracking_map.put("Counselor_name",getDeal.get("Counselor_Conseiller").get("name"));
+			tracking_map.put("Counselor_ID",getDeal.get("Counselor_Conseiller").get("id"));
+			/*user*/
+			getCounselor = zoho.crm.getRecordById("Advisor",getDeal.get("Counselor_Conseiller").get("id").toLong());
+			if(getCounselor.get("id") != null && getCounselor.get("Counselor_user") != null)
+			{
+				getOwner = zoho.crm.getRecordById("users",getCounselor.get("Counselor_user").get("id").toLong());
+				if(getOwner.get("users") != null)
+				{
+					for each  rec in getOwner.get("users")
+					{
+						if(rec.get("status") == "active")
+						{
+							tracking_map.put("Counselor_User",rec.get("id"));
+						}
+						else
+						{
+							tracking_map.put("Counselor_User",null);
+						}
+					}
+				}
+			}
+		}
+		if(getDeal.get("Conseiller_temporaire_Temporary_counselor") != null)
+		{
+			tracking_map.put("Temporary_Counselor_name",getDeal.get("Conseiller_temporaire_Temporary_counselor").get("name"));
+			tracking_map.put("Temporary_Counselor_ID",getDeal.get("Conseiller_temporaire_Temporary_counselor").get("id"));
+			/*user*/
+			getCounselor = zoho.crm.getRecordById("Advisor",getDeal.get("Conseiller_temporaire_Temporary_counselor").get("id").toLong());
+			if(getCounselor.get("id") != null && getCounselor.get("Counselor_user") != null)
+			{
+				getOwner = zoho.crm.getRecordById("users",getCounselor.get("Counselor_user").get("id").toLong());
+				if(getOwner.get("users") != null)
+				{
+					for each  rec in getOwner.get("users")
+					{
+						if(rec.get("status") == "active")
+						{
+							tracking_map.put("Temporary_User",rec.get("id"));
+						}
+						else
+						{
+							tracking_map.put("Temporary_User",null);
+						}
+					}
+				}
+			}
+		}
+		tracking_map.put("Deal_ID",getDeal.get("id").toString());
+		tracking_map.put("D_marches_Status",getDeal.get("Stage"));
+		if(getDeal.get("Stage") == "Active" || getDeal.get("Stage") == "Visite du domicile/hôpital/Home/hospital in-person visit" || getDeal.get("Stage") == "Proposition du profil à des résidences/Profile sent to retirement homes" || getDeal.get("Stage") == "Visite de résidences/Retirement home visits" || getDeal.get("Stage") == "En réflexion (suivi en cours)/On hold (ongoing follow up)" || getDeal.get("Stage") == "En pause - soins à domicile (suivi en cours)/On hold - home care (ongoing follow up)")
+		{
+			tracking_map.put("Deal_Status","Opened");
+		}
+		if(getDeal.get("Stage") == "Location enregistrée/Registered renting")
+		{
+			tracking_map.put("Deal_Status","Closed Won");
+		}
+		else if(getDeal.get("Stage") == "Fermé - solution alternative/Closed-lost (alternative solution)" || getDeal.get("Stage") == "Fermé - transfert au public/Closed-lost (transfer to public healthcare)" || getDeal.get("Stage") == "Fermé - décédé/Closed-lost (deceased)" || getDeal.get("Stage") == "Fermé/Closed (ancien CRM)")
+		{
+			tracking_map.put("Deal_Status","Closed Lost");
+		}
+		if(getDeal.get("Contact") != null)
+		{
+			tracking_map.put("client_1",getDeal.get("Contact").get("id"));
+			if(getDeal.get("Contact").get("id") != null)
+			{
+				get_contacts = zoho.crm.getRecordById("Contacts",getDeal.get("Contact").get("id"));
+				tracking_map.put("Provinces",get_contacts.get("Provinces"));
+			}
+		}
+		if(getDeal.get("Contacts") != null)
+		{
+			tracking_map.put("client_2",getDeal.get("Contacts").get("id"));
+			if(getDeal.get("Contacts").get("id") != null)
+			{
+				get_contacts = zoho.crm.getRecordById("Contacts",getDeal.get("Contacts").get("id"));
+				tracking_map.put("Client_2_Provinces",get_contacts.get("Provinces"));
+			}
+		}
+		tracking_map.put("Deal_Type","Housing");
+		/* contact subform*/
+		subformInfo = getDeal.get("Contact_persons");
+		for each  contactSubform in subformInfo
+		{
+			if(contactSubform.get("Kind_of_Contact") == "Primaire/Primary")
+			{
+				if(contactSubform.get("contact") != null)
+				{
+					tracking_map.put("Primary_Contacts",contactSubform.get("contact").get("id"));
+				}
+			}
+			if(contactSubform.get("Kind_of_Contact") == "Secondaire/Secondary")
+			{
+				if(contactSubform.get("contact") != null)
+				{
+					tracking_map.put("secondary_contact",contactSubform.get("contact").get("id"));
+				}
+			}
+			if(contactSubform.get("Kind_of_Contact") == "Soins de santé/Health Care")
+			{
+				if(contactSubform.get("contact") != null)
+				{
+					tracking_map.put("Health_care_contact",contactSubform.get("contact").get("id"));
+				}
+			}
+		}
+		/* Residence Subform*/
+		resInfo = getDeal.get("Subform_3");
+		resList = list();
+		for each  resSubform in resInfo
+		{
+			res_map = Map();
+			if(resSubform.get("Residence") != null)
+			{
+				res_map.put("Residence_number",resSubform.get("Residence").get("id"));
+				res_map.put("Profile_Sent_Date",resSubform.get("Date_profile_sent"));
+				resList.add(res_map);
+			}
+		}
+		tracking_map.put("D_marches_Residence",resList);
+		/*Deal source*/
+		tracking_map.put("Deal_Type_Deal_1",getDeal.get("Deal_type_Type_de_d_marche"));
+		tracking_map.put("Deal_Source",getDeal.get("Lead_source_1"));
+		tracking_map.put("RSSS",ifnull(getDeal.get("Health_care_network_RSSS"),""));
+		tracking_map.put("Web",ifnull(getDeal.get("Web"),""));
+		tracking_map.put("Partners",ifnull(getDeal.get("Partners_Partenaires"),""));
+		tracking_map.put("Trad_marketing",ifnull(getDeal.get("Trade_marketing_1"),""));
+		tracking_map.put("Precision",ifnull(getDeal.get("Precision"),""));
+		hospitalInfo = getDeal.get("Hospital");
+		if(hospitalInfo != null)
+		{
+			tracking_map.put("Deal_Hospital_1",hospitalInfo.get("name"));
+			tracking_map.put("Deal_Hospital_ID_1",hospitalInfo.get("id"));
+			hsptlmap.put("Hospital_Contact",hospitalInfo.get("name"));
+			hsptlmap.put("Hospital_Contact_ID",hospitalInfo.get("id"));
+			contactInfo = zoho.crm.getRelatedRecords("Hospital_Branches21","Hospital_Contacts",hospitalInfo.get("id"));
+			for each  rec in contactInfo
+			{
+				if(rec.get("Hospital_Branches") != null)
+				{
+					tracking_map.put("Deal_Hospital_Branch_1",rec.get("Hospital_Branches").get("name"));
+					hsptlmap.put("Branch",rec.get("Hospital_Branches").get("name"));
+					branchInfo = zoho.crm.getRecordById("Branches",rec.get("Hospital_Branches").get("id"));
+					if(branchInfo.get("id") != null)
+					{
+						hsptlInfo = zoho.crm.getRelatedRecords("Hospital19","Branches",branchInfo.get("id"));
+						for each  rechsptl in hsptlInfo
+						{
+							if(rechsptl.get("Hospital_Branches") != null)
+							{
+								tracking_map.put("Deal_Hospital_11",rechsptl.get("Hospital_Branches").get("name"));
+								hsptlmap.put("Hospital1",rechsptl.get("Hospital_Branches").get("name"));
+							}
+						}
+					}
+				}
+			}
+		}
+		createTrackingRecord = zoho.crm.createRecord("Tracking",tracking_map);
+		if(createTrackingRecord.get("id") != null)
+		{
+			updateDealMap = Map();
+			updateDealMap.put("Tracking_Id",createTrackingRecord.get("id"));
+			updateDealMap.put("Deal_IDS","Deal1");
+			updateDeal = zoho.crm.updateRecord("Deals",dealID.toNumber(),updateDealMap);
+			/*Hospital tracking*/
+			hospitalTracking = zoho.creator.createRecord("lion_visavie","visavie","Hospital_Tracking",hsptlmap,Map(),"zoho_mail");
+			if(hospitalTracking.get("code") != 3000)
+			{
+				dataMap = Map();
+				dataMap.put("Module","Deal");
+				dataMap.put("Process_Description","CRM: Create Deal in Hospital Tracking Creator");
+				dataMap.put("In_Data",dealID);
+				dataMap.put("Out_Response",hospitalTracking);
+				createHospitalResponse = zoho.creator.createRecord(ownerName,appName,formName,dataMap,Map(),"zoho_mail");
+			}
+		}
+		else
+		{
+			dataMap = Map();
+			dataMap.put("Module","Deal");
+			dataMap.put("Process_Description","CRM: Create Deal Tracking Record");
+			dataMap.put("In_Data",dealID);
+			dataMap.put("Out_Response",createTrackingRecord);
+			ContactCreateResponse = zoho.creator.createRecord(ownerName,appName,formName,dataMap,Map(),"zoho_mail");
+		}
+	}
+}
+catch (e)
+{
+	dataMap = Map();
+	dataMap.put("Module","Deal");
+	dataMap.put("Process_Description","CRM: Create Deal Tracking Record");
+	dataMap.put("In_Data",dealID);
+	dataMap.put("Out_Response",e);
+	ContactCreateResponse = zoho.creator.createRecord(ownerName,appName,formName,dataMap,Map(),"zoho_mail");
+}
